@@ -1,8 +1,9 @@
 const User = require('../../models/user');
 const bcrypt = require('bcrypt');
-const accountSid = "ACb6286e75ff03232cd44bf508fc8bd681";
-const authToken = 'd88fe971c66fa35259ef4fb675cd684c';
-const verifySid = "VAac237173a20b9d7ed80df12820e804f5";
+const accountSid = process.env.ACCOUNT_SID;
+const authToken = process.env.TWILIO_AUTH_TOKEN;
+const verifySid = process.env.VERIFY_SID;
+
 const client = require("twilio")(accountSid, authToken);
 
 
