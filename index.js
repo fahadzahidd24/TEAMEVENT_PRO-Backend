@@ -5,12 +5,14 @@ const bodyParser = require('body-parser');
 require('dotenv').config();
 const connectDb = require('./config/db/db')
 const auth = require('./routes/auth');
+const user = require('./routes/user');
 
 app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use('/api', auth)
+app.use('/api', user)
 
 const startServer = async () => {
     try {
