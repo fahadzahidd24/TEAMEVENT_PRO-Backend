@@ -1,13 +1,15 @@
 const express = require('express');
 const router = express.Router();
-const { checkNumberAvailability, resendOTP, verifyOTP, registerUser, login } = require('../controllers/Auth/Auth');
+const { registerUser, login, verifyOtp, resendOtp, setUser, forgotPassword, newPassword } = require('../controllers/Auth/Auth');
 const { upload } = require('../config/multer');
 
 
-router.post('/register/checkNumber', checkNumberAvailability);
-router.post('/register/resendOTP', resendOTP);
-router.post('/register/verifyOTP', verifyOTP);
-router.post('/register/registerUser',upload.array("photo"), registerUser);
+router.post('/setUser', upload.array("photo"), setUser);
+router.post('/resendOTP', resendOtp);
+router.post('/verifyOTP', verifyOtp);
+router.post('/register', registerUser);
 router.post('/login', login);
+router.post('/forgotPassword', forgotPassword);
+router.post('/newPassword', newPassword);
 
 module.exports = router;
