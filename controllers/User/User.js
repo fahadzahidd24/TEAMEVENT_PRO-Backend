@@ -4,13 +4,14 @@ const bcrypt = require('bcrypt');
 
 exports.UpdateProfile = async (req, res) => {
     try {
-        console.log("agya");
-        const { name, phone, currentPassword, password, CPassword } = req.body;
-        const user = await User.findOne({ phone });
+        const { name, email, currentPassword, password, CPassword } = req.body;
+        const file = req.files[0];
+
+        let user = await User.findOne({ email });
         if (!user) {
-            return res.status(404).json({ message: "This phone number is no longer registered" });
+            return res.status(404).json({ message: "This Email is no longer registered" });
         }
-        if (!name || !phone)
+        if (!name || !email)
             return res.status(400).json({ message: "Please fill all the fields" });
         if (password && CPassword && currentPassword) {
             const isPasswordCorrect = await bcrypt.compare(currentPassword, user.password);
@@ -24,25 +25,14 @@ exports.UpdateProfile = async (req, res) => {
                 user.password = passwordHash;
             }
         }
-
-        const file = req.files[0];
-        console.log(file);
-        if (!file) {
-            user.name = name;
-            user.phone = phone;
-
-            user.save();
-            return res.status(200).json({ message: "Profile Updated Successfully" });
-        }
-        else {
-            const cloudinaryResponse = await uploadToCloudinary(file.path, "user-image");
-            console.log(cloudinaryResponse.secure_url);
-            user.name = name;
-            user.phone = phone;
-            user.profilePicture = cloudinaryResponse.secure_url;
-            user.save();
-            return res.status(200).json({ message: "Profile Updated Successfully" });
-        }
+        const cloudinaryResponse = await uploadToCloudinary(file.path, "user-image");
+        user.name = name;
+        user.email = email;
+        user.profilePicture = cloudinaryResponse.secure_url;
+        user.save();
+        user = user.toObject();
+        delete user.password;
+        return res.status(200).json({ message: "Profile Updated Successfully", user: user  });
     } catch (error) {
         console.log(error);
         return res.status(500).json({ message: `Internal Server Error` });
