@@ -1,10 +1,6 @@
 const { uploadToCloudinary } = require('../../config/cloudinary');
 const User = require('../../models/user');
 const bcrypt = require('bcrypt');
-const accountSid = process.env.ACCOUNT_SID;
-const authToken = process.env.TWILIO_AUTH_TOKEN;
-const verifySid = process.env.VERIFY_SID;
-const client = require("twilio")(accountSid, authToken);
 const jwt = require('jsonwebtoken');
 const sendEmail = require('../../config/nodemailer/nodemailer');
 const otpGenerator = require('otp-generator');
